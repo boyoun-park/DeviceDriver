@@ -1,2 +1,2 @@
-# Device Drvier
-H/W ╟Ё╧ъюл ©о╥А╣гаЖ ╬йю╨ ╩Себ©║╪╜ Mocking ю╩ х╟©Кго©╘ Device Driver ╟Ё╧ъго╠Б ╫г╫ю
+# Device Driver
+H/W Й╟°К╟°Л²╢ Л≥└Кё▄К░≤Л╖─ Л∙┼Л²─ Л┐│М┐°Л≈░Л└° Mocking Л²└ М≥°Л ╘М∙≤Л≈╛ Device Driver Й╟°К╟°М∙≤Й╦╟ Л▀╓Л┼╣
