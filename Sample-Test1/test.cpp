@@ -10,7 +10,7 @@ public:
 	MOCK_METHOD(void, write, (long address, unsigned char data), (override));
 };
 
-TEST(TestCaseName, TestName) {
+TEST(DeviceDriverTest, readException) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
@@ -20,4 +20,15 @@ TEST(TestCaseName, TestName) {
 		.WillRepeatedly(Return(0x1));
 
 	EXPECT_THROW(driver.read(0x1), ReadFailException);
+}
+
+
+TEST(DeviceDriverTest, normalRead) {
+	MockDevice mock;
+	DeviceDriver driver(&mock);
+
+	EXPECT_CALL(mock, read(0x1))
+		.WillRepeatedly(Return(0xFF));
+
+	EXPECT_THAT(0xFF, Eq(driver.read(0x1)));
 }
