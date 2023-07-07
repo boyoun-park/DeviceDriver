@@ -1,5 +1,10 @@
 #pragma once
 #include "FlashMemoryDevice.h"
+#include <exception>
+
+using namespace std;
+
+class ReadFailException : public exception{};
 
 class DeviceDriver
 {
