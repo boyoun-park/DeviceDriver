@@ -17,8 +17,14 @@ int DeviceDriver::read(long address)
 	return (int)(refValue);
 }
 
+void DeviceDriver::IsDeviceWritable(long address)
+{
+	int curValue = m_hardware->read(address);
+	if (curValue != EMPTY_VALUE) throw(WriteFailException());
+}
+
 void DeviceDriver::write(long address, int data)
 {
-	// TODO: implement this method
+	IsDeviceWritable(address);
 	m_hardware->write(address, (unsigned char)data);
 }
