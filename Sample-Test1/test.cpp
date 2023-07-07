@@ -31,11 +31,12 @@ TEST(DeviceDriverTest, normalRead) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
+	const int readTimesinDriver = 5;
 	const long dummyAddress = 0x1;
 	const unsigned char dummyData = 0x2;
 
 	EXPECT_CALL(mock, read(dummyAddress))
-		.Times(5)
+		.Times(readTimesinDriver)
 		.WillRepeatedly(Return(dummyData));
 
 	EXPECT_THAT(dummyData, Eq(driver.read(dummyAddress)));
@@ -75,9 +76,14 @@ TEST(AppTest, readMultipleAddr) {
 	DeviceDriver driver(&mock);
 	App app(&driver);
 
-	EXPECT_CALL(mock, read(_))
-		.Times(5*5)
-		.WillRepeatedly(Return(0x2));
+	const int addressOffset = 5;
+	const int readTimesinDriver = 5;
+	const long dummyAddress = 0x1;
+	const long dummyData = 0x2;
 
-	app.ReadAndPrint(0x1, 0x1 + 4);
+	EXPECT_CALL(mock, read(_))
+		.Times(addressOffset * readTimesinDriver)
+		.WillRepeatedly(Return(dummyData));
+
+	app.ReadAndPrint(dummyAddress, dummyAddress + addressOffset - 1);
 }
