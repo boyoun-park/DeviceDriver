@@ -14,43 +14,57 @@ TEST(DeviceDriverTest, readException) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
-	EXPECT_CALL(mock, read(0x1))
-		.WillOnce(Return(0x1))
-		.WillOnce(Return(0x2))
-		.WillRepeatedly(Return(0x1));
+	const long dummyAddress = 0x1;
+	const unsigned char correctDummyData = 0x1;
+	const unsigned char wrongDummyData = 0x2;
 
-	EXPECT_THROW(driver.read(0x1), ReadFailException);
+	EXPECT_CALL(mock, read(dummyAddress))
+		.WillOnce(Return(correctDummyData))
+		.WillOnce(Return(wrongDummyData))
+		.WillRepeatedly(Return(correctDummyData));
+
+	EXPECT_THROW(driver.read(dummyAddress), ReadFailException);
 }
 
 TEST(DeviceDriverTest, normalRead) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
-	EXPECT_CALL(mock, read(0x1))
-		.Times(5)
-		.WillRepeatedly(Return(0xFF));
+	const long dummyAddress = 0x1;
+	const unsigned char dummyData = 0x2;
 
-	EXPECT_THAT(0xFF, Eq(driver.read(0x1)));
+	EXPECT_CALL(mock, read(dummyAddress))
+		.Times(5)
+		.WillRepeatedly(Return(dummyData));
+
+	EXPECT_THAT(dummyData, Eq(driver.read(dummyAddress)));
 }
 
 TEST(DeviceDriverTest, writeException) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
-	EXPECT_CALL(mock, read(0x1))
-		.WillRepeatedly(Return(0x1));
+	const long dummyAddress = 0x1;
+	const unsigned char dummyData = 0x2;
 
-	EXPECT_THROW(driver.write(0x1, 0x1), WriteFailException);
+	EXPECT_CALL(mock, read(dummyAddress))
+		.WillRepeatedly(Return(dummyData));
+
+	EXPECT_THROW(driver.write(dummyAddress, dummyData), WriteFailException);
 }
 
 TEST(DeviceDriverTest, normalWrite) {
 	MockDevice mock;
 	DeviceDriver driver(&mock);
 
-	EXPECT_CALL(mock, read(0x1))
-		.WillOnce(Return(0xFF))
-		.WillRepeatedly(Return(0x1));
+	const long dummyAddress = 0x1;
+	const unsigned char emptyData = 0xFF;
+	const unsigned char dummyData = 0x2;
 
-	driver.write(0x1, 0x1);
-	EXPECT_THAT(0x1, Eq(driver.read(0x1)));
+	EXPECT_CALL(mock, read(dummyAddress))
+		.WillOnce(Return(emptyData))
+		.WillRepeatedly(Return(dummyData));
+
+	driver.write(dummyAddress, dummyData);
+	EXPECT_THAT(dummyData, Eq(driver.read(dummyAddress)));
 }
