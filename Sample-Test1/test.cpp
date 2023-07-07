@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "../DeviceDriver/DeviceDriver.cpp"
+#include "../DeviceDriver/App.cpp"
 
 using namespace testing;
 
@@ -67,4 +68,16 @@ TEST(DeviceDriverTest, normalWrite) {
 
 	driver.write(dummyAddress, dummyData);
 	EXPECT_THAT(dummyData, Eq(driver.read(dummyAddress)));
+}
+
+TEST(AppTest, readMultipleAddr) {
+	MockDevice mock;
+	DeviceDriver driver(&mock);
+	App app(&driver);
+
+	EXPECT_CALL(mock, read(_))
+		.Times(5*5)
+		.WillRepeatedly(Return(0x2));
+
+	app.ReadAndPrint(0x1, 0x1 + 4);
 }
