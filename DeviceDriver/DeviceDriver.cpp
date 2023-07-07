@@ -19,6 +19,8 @@ int DeviceDriver::read(long address)
 
 void DeviceDriver::write(long address, int data)
 {
-	// TODO: implement this method
+	// read 한 값이 0xFF 가 아니면 exception
+	int curValue = m_hardware->read(address);
+	if (curValue != 0xFF) throw(WriteFailException());
 	m_hardware->write(address, (unsigned char)data);
 }

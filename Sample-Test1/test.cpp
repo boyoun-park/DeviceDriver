@@ -32,3 +32,13 @@ TEST(DeviceDriverTest, normalRead) {
 
 	EXPECT_THAT(0xFF, Eq(driver.read(0x1)));
 }
+
+TEST(DeviceDriverTest, writeException) {
+	MockDevice mock;
+	DeviceDriver driver(&mock);
+
+	EXPECT_CALL(mock, read(0x1))
+		.WillRepeatedly(Return(0x1));
+
+	EXPECT_THROW(driver.write(0x1, 0x1), WriteFailException);
+}

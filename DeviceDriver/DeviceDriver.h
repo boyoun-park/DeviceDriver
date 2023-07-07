@@ -5,6 +5,7 @@
 using namespace std;
 
 class ReadFailException : public exception{};
+class WriteFailException : public exception {};
 
 class DeviceDriver
 {
