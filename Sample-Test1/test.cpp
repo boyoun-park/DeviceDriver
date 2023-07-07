@@ -87,3 +87,33 @@ TEST(AppTest, readMultipleAddr) {
 
 	app.ReadAndPrint(dummyAddress, dummyAddress + addressOffset - 1);
 }
+
+TEST(AppTest, writeMultipleAddr) {
+	MockDevice mock;
+	DeviceDriver driver(&mock);
+	App app(&driver);
+
+	const int addressOffset = 5;
+	const long targetAddress = 0x0;
+	const long dummyData = 0x2;
+
+	EXPECT_CALL(mock, read(_))
+		.WillOnce(Return(0xFF))
+		.WillOnce(Return(0xFF))
+		.WillOnce(Return(0xFF))
+		.WillOnce(Return(0xFF))
+		.WillOnce(Return(0xFF))
+		.WillRepeatedly(Return(dummyData));
+
+	for (int address = targetAddress; address < targetAddress + addressOffset; address++) {
+		EXPECT_CALL(mock, write(address, dummyData))
+			.Times(1);
+	}
+
+	app.WriteAll(dummyData);
+
+	for (int address = targetAddress; address < targetAddress + addressOffset; address++) {
+		EXPECT_THAT(dummyData, Eq(driver.read(address)));
+	}
+}
+
