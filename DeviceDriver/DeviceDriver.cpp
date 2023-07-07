@@ -20,7 +20,7 @@ int DeviceDriver::read(long address)
 void DeviceDriver::IsDeviceWritable(long address)
 {
 	int curValue = m_hardware->read(address);
-	if (curValue != 0xFF) throw(WriteFailException());
+	if (curValue != EMPTY_VALUE) throw(WriteFailException());
 }
 
 void DeviceDriver::write(long address, int data)

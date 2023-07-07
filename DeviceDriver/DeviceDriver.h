@@ -17,4 +17,5 @@ public:
 
 protected:
 	FlashMemoryDevice *m_hardware;
+	const unsigned char EMPTY_VALUE = 0xFF;
 };
